@@ -1,10 +1,11 @@
-import { useEffect, useReducer, useRef } from "react"
+import { useReducer, useRef } from "react"
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom"
 
 import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
 import { ReturnFlowContext } from "@/features/returns/ReturnFlowContext"
 import { createInitialReturnFlowState, returnFlowReducer } from "@/features/returns/returnFlowReducer"
 import { isOrderReturnEligible } from "@/features/orders/orderSummary"
+import { useFocusOnChange } from "@/hooks/useFocusOnChange"
 import { NotFoundPage } from "@/pages/NotFoundPage"
 import { ReturnConfirmationStep } from "@/pages/return/ReturnConfirmationStep"
 import { ReturnItemsStep } from "@/pages/return/ReturnItemsStep"
@@ -46,9 +47,7 @@ function ReturnFlow({ orderId }: { orderId: string }) {
   // Edit-link jumps back to an earlier step) so screen reader users land
   // somewhere meaningful instead of keeping focus on a button that just
   // navigated them away.
-  useEffect(() => {
-    stepHeadingRef.current?.focus()
-  }, [location.pathname])
+  useFocusOnChange(stepHeadingRef, location.pathname)
 
   return (
     <ReturnFlowContext.Provider value={{ state, dispatch }}>
