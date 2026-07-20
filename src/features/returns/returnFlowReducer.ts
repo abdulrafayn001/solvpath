@@ -5,6 +5,7 @@ export function createInitialReturnFlowState(orderId: string): ReturnFlowState {
     orderId,
     selectedItems: [],
     reason: "",
+    comment: "",
     resolution: null,
   }
 }
@@ -15,6 +16,8 @@ export function returnFlowReducer(state: ReturnFlowState, action: ReturnFlowActi
       return { ...state, selectedItems: action.items }
     case "SET_REASON":
       return { ...state, reason: action.reason }
+    case "SET_COMMENT":
+      return { ...state, comment: action.comment }
     case "SET_RESOLUTION":
       return { ...state, resolution: action.resolution }
     case "RESET":
