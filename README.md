@@ -29,3 +29,7 @@ import { Button } from "@/components/ui/button"
 - `src/api/order.types.ts` re-exports `mockApi.ts`'s types (`Order`, `OrderStatus`, `Page`, etc.) instead of redeclaring them
 - Search (`SearchInput`) matches both order number and product name in one field, since `mockApi.ts`'s `listOrders` already filters on both — not a UI choice, just surfacing the fixed API contract.
 - Added step-gating (`returnFlowGuard.ts`) that redirects to the earliest incomplete step, and an order-eligibility guard on `ReturnFlowPage` (extracted `isOrderReturnEligible`) that bounces non-delivered/ineligible orders back to the order detail page instead of into the return flow.
+
+### What I deliberately skipped
+
+- **Per-item mixed resolution.** One resolution applies to the whole return, not a different one per item (e.g. refund one item, exchange another), the mock API only accepts a single resolution per submission, so supporting this properly would mean splitting a return into multiple sub-requests with their own retry handling. Cut for time; a deliberate scope call, not an oversight.
