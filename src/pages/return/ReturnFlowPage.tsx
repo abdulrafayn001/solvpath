@@ -1,8 +1,10 @@
 import { useReducer } from "react"
-import { Route, Routes, useLocation, useParams } from "react-router-dom"
+import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom"
 
+import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
 import { ReturnFlowContext } from "@/features/returns/ReturnFlowContext"
 import { createInitialReturnFlowState, returnFlowReducer } from "@/features/returns/returnFlowReducer"
+import { isOrderReturnEligible } from "@/features/orders/orderSummary"
 import { NotFoundPage } from "@/pages/NotFoundPage"
 import { ReturnConfirmationStep } from "@/pages/return/ReturnConfirmationStep"
 import { ReturnItemsStep } from "@/pages/return/ReturnItemsStep"
@@ -18,7 +20,16 @@ export function ReturnFlowPage() {
     return <NotFoundPage />
   }
 
-  return <ReturnFlow orderId={orderId} />
+  return (
+    <OrderLoadGate orderId={orderId}>
+      {(order) => {
+        if (!isOrderReturnEligible(order)) {
+          return <Navigate to={`/orders/${orderId}`} replace />
+        }
+        return <ReturnFlow orderId={orderId} />
+      }}
+    </OrderLoadGate>
+  )
 }
 
 function ReturnFlow({ orderId }: { orderId: string }) {

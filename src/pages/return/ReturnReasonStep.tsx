@@ -1,16 +1,23 @@
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
 import { RETURN_REASON_PRESETS } from "@/features/returns/returnReasonPresets"
 
+import { getReturnFlowRedirectStep } from "./returnFlowGuard"
+
 export function ReturnReasonStep() {
   const { orderId } = useParams()
   const navigate = useNavigate()
   const { state, dispatch } = useReturnFlow()
   const [showValidation, setShowValidation] = useState(false)
+
+  const redirectStep = getReturnFlowRedirectStep("reason", state)
+  if (redirectStep) {
+    return <Navigate to={`/orders/${orderId}/return/${redirectStep}`} replace />
+  }
 
   const requiresComment = RETURN_REASON_PRESETS.find((preset) => preset.value === state.reason)
     ?.requiresComment ?? false

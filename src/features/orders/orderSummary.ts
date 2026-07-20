@@ -8,6 +8,10 @@ export function getItemLineTotalCents(item: OrderItem) {
   return item.unitPriceCents * item.quantity
 }
 
+export function isOrderReturnEligible(order: Order) {
+  return order.status === "delivered" && order.items.some((item) => item.returnEligible)
+}
+
 export function getItemSummary(order: Order) {
   const [first, ...rest] = order.items
   const extraCount = rest.reduce((sum, item) => sum + item.quantity, 0)

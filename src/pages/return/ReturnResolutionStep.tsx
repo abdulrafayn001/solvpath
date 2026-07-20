@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 import type { ReturnResolution } from "@/api"
 import { Button } from "@/components/ui/button"
@@ -12,12 +12,18 @@ import { formatCents } from "@/lib/format"
 import { cn } from "@/lib/utils"
 
 import { RESOLUTION_OPTIONS } from "./resolutionOptions"
+import { getReturnFlowRedirectStep } from "./returnFlowGuard"
 
 export function ReturnResolutionStep() {
   const { orderId } = useParams()
   const navigate = useNavigate()
   const { state, dispatch } = useReturnFlow()
   const [showValidation, setShowValidation] = useState(false)
+
+  const redirectStep = getReturnFlowRedirectStep("resolution", state)
+  if (redirectStep) {
+    return <Navigate to={`/orders/${orderId}/return/${redirectStep}`} replace />
+  }
 
   function handleContinue() {
     if (!state.resolution) {

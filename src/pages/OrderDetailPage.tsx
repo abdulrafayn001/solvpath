@@ -6,7 +6,7 @@ import { StatusBadge } from "@/components/StatusBadge"
 import { Button } from "@/components/ui/button"
 import { OrderDetailSkeleton } from "@/features/orders/OrderDetailSkeleton"
 import { ItemIdentity } from "@/features/orders/ItemIdentity"
-import { getItemLineTotalCents, getOrderTotalCents } from "@/features/orders/orderSummary"
+import { getItemLineTotalCents, getOrderTotalCents, isOrderReturnEligible } from "@/features/orders/orderSummary"
 import { useOrder } from "@/hooks/useOrder"
 import { formatCents, formatOrderDate } from "@/lib/format"
 
@@ -37,10 +37,8 @@ export function OrderDetailPage() {
     )
   }
 
-  const canReturn = order.status === "delivered"
-  const hasReturnEligibleItem = order.items.some((item) => item.returnEligible)
-  const showReturnCta = canReturn && hasReturnEligibleItem
-  const returnDisabledReason = !canReturn
+  const showReturnCta = isOrderReturnEligible(order)
+  const returnDisabledReason = order.status !== "delivered"
     ? "Returns are available once your order is delivered."
     : "No items in this order are eligible for return."
 

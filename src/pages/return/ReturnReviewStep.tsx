@@ -1,5 +1,5 @@
 import { Loader2 } from "lucide-react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
 import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
@@ -14,6 +14,7 @@ import { useSubmitReturn } from "@/hooks/useSubmitReturn"
 import { formatCents } from "@/lib/format"
 
 import { RESOLUTION_OPTIONS } from "./resolutionOptions"
+import { getReturnFlowRedirectStep } from "./returnFlowGuard"
 
 export function ReturnReviewStep() {
   const { orderId } = useParams()
@@ -21,19 +22,12 @@ export function ReturnReviewStep() {
   const { state } = useReturnFlow()
   const submitReturn = useSubmitReturn()
 
-  if (state.selectedItems.length === 0 || !state.reason || !state.resolution) {
-    return (
-      <p className="text-sm text-muted-foreground">
-        Some steps are incomplete. Go back to{" "}
-        <Link to={`/orders/${orderId}/return/items`} className="text-primary underline underline-offset-4">
-          select items
-        </Link>
-        .
-      </p>
-    )
+  const redirectStep = getReturnFlowRedirectStep("review", state)
+  if (redirectStep) {
+    return <Navigate to={`/orders/${orderId}/return/${redirectStep}`} replace />
   }
 
-  const resolution = state.resolution
+  const resolution = state.resolution!
   const resolutionOption = RESOLUTION_OPTIONS.find((option) => option.value === resolution)
 
   return (
