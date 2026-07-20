@@ -24,3 +24,4 @@ import { Button } from "@/components/ui/button"
 
 ### What I built
 - Locked the project's Node version via `.nvmrc` (24.18.0), `package.json` `engines.node`, and `.npmrc` (`engine-strict=true`) — so every contributor and CI run resolves to the same Node runtime instead of whatever is installed globally. This avoids "works on my machine" bugs from Node version drift (e.g. differing built-in fetch/test-runner behavior, engine warnings, or native module ABI mismatches across major versions).
+- Configured ESLint (flat config, TS + React Hooks + React Refresh rules) and Prettier (with `prettier-plugin-tailwindcss` for class sorting), and set up the `@/` path alias in both `tsconfig.json` and `vite.config.ts` so imports resolve as `@/features/...` instead of relative `../../../` chains.
