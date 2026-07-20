@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/inter";
+@import "./styles/brand-tokens.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -49,30 +50,34 @@
 }
 
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    /* Mapped from brand-tokens.css (SOLV-61). --muted and --accent collide in
+       name with brand tokens of a different meaning (muted text vs muted bg,
+       vivid teal vs soft teal bg) — hardcoded as literals here rather than
+       chained through var() so nothing silently overrides the other. */
+    --background: var(--canvas);
+    --foreground: var(--ink);
+    --card: var(--surface);
+    --card-foreground: var(--ink);
+    --popover: var(--surface);
+    --popover-foreground: var(--ink);
+    --primary: var(--brand);
+    --primary-foreground: #ffffff;
+    --secondary: var(--brand-soft);
+    --secondary-foreground: var(--brand);
+    --muted: #eef2f4;
+    --muted-foreground: #566671;
+    --accent: #e4f5f8;
+    --accent-foreground: #0c6e80;
+    --destructive: var(--danger);
+    --border: var(--line);
+    --input: var(--line);
+    --ring: #28b0c8;
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
-    --radius: 0.625rem;
+    --radius: 0.75rem;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);
