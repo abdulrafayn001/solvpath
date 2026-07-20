@@ -1,5 +1,6 @@
 import { useMediaQuery } from "@/hooks/useMediaQuery"
 import { useOrderFilters } from "@/hooks/useOrderFilters"
+import { DESKTOP_QUERY } from "@/lib/constants"
 import { DesktopOrdersView } from "./DesktopOrdersView"
 import { MobileOrdersInfiniteList } from "./MobileOrdersInfiniteList"
 import { SearchInput } from "./SearchInput"
@@ -7,7 +8,7 @@ import { StatusFilter } from "./StatusFilter"
 
 export function OrdersDashboard() {
   const { status, query, page, hasActiveFilters, setStatus, setQuery, setPage, clearFilters } = useOrderFilters()
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const isDesktop = useMediaQuery(DESKTOP_QUERY)
 
   return (
     <div className="flex flex-col gap-6">

@@ -1,4 +1,4 @@
-import { useReducer } from "react"
+import { useEffect, useReducer, useRef } from "react"
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom"
 
 import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
@@ -35,18 +35,37 @@ export function ReturnFlowPage() {
 function ReturnFlow({ orderId }: { orderId: string }) {
   const [state, dispatch] = useReducer(returnFlowReducer, orderId, createInitialReturnFlowState)
   const location = useLocation()
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null)
 
   const currentStepIndex = RETURN_FLOW_STEPS.findIndex((step) => location.pathname.endsWith(`/${step.path}`))
   const stepNumber = Math.max(currentStepIndex, 0) + 1
   const isConfirmation = location.pathname.endsWith("/confirmation")
+  const currentStepLabel = RETURN_FLOW_STEPS[currentStepIndex]?.label
+
+  // Move focus to the current view's heading on every step change (including
+  // Edit-link jumps back to an earlier step) so screen reader users land
+  // somewhere meaningful instead of keeping focus on a button that just
+  // navigated them away.
+  useEffect(() => {
+    stepHeadingRef.current?.focus()
+  }, [location.pathname])
 
   return (
     <ReturnFlowContext.Provider value={{ state, dispatch }}>
-      <div className="flex flex-col gap-4 p-6">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h1 className="text-lg font-medium text-foreground">Return for order {orderId}</h1>
+          <h1
+            className="text-lg font-medium text-foreground outline-none"
+            ref={isConfirmation ? stepHeadingRef : undefined}
+            tabIndex={isConfirmation ? -1 : undefined}
+          >
+            Return for order {orderId}
+          </h1>
           {isConfirmation ? null : (
             <div className="flex flex-col gap-1.5">
+              <h2 ref={stepHeadingRef} tabIndex={-1} className="text-base font-medium text-foreground outline-none">
+                {currentStepLabel}
+              </h2>
               <p className="text-sm text-muted-foreground">
                 Step {stepNumber} of {RETURN_FLOW_STEPS.length}
               </p>

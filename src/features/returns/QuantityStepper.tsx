@@ -17,7 +17,9 @@ export function QuantityStepper({ qty, max, onChange, disabled = false }: Quanti
       >
         <Minus />
       </Button>
-      <span className="w-4 text-center text-sm tabular-nums text-foreground">{qty}</span>
+      <span aria-live="polite" className="w-4 text-center text-sm tabular-nums text-foreground">
+        {qty}
+      </span>
       <Button
         type="button"
         variant="outline"

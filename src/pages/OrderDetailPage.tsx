@@ -73,7 +73,9 @@ export function OrderDetailPage() {
 
       <div className="flex flex-col items-start gap-1.5">
         {showReturnCta ? (
-          <Button render={<Link to={`/orders/${order.id}/return`} />}>Start a return</Button>
+          <Button render={<Link to={`/orders/${order.id}/return`} />} nativeButton={false}>
+            Start a return
+          </Button>
         ) : (
           <Button disabled>Start a return</Button>
         )}

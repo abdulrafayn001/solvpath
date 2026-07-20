@@ -4,6 +4,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
+import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
 import { RETURN_REASON_PRESETS } from "@/features/returns/returnReasonPresets"
 
 import { getReturnFlowRedirectStep } from "./returnFlowGuard"
@@ -31,9 +32,16 @@ export function ReturnReasonStep() {
     navigate(`/orders/${orderId}/return/resolution`)
   }
 
+  const reasonErrorId = "return-reason-error"
+  const commentErrorId = "return-comment-error"
+  const showReasonError = showValidation && !state.reason
+  const showCommentError = showValidation && missingComment
+
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-sm text-muted-foreground">What's the reason for this return?</p>
+      <p id="return-reason-label" className="text-sm text-muted-foreground">
+        What's the reason for this return?
+      </p>
 
       <RadioGroup
         value={state.reason}
@@ -41,6 +49,8 @@ export function ReturnReasonStep() {
           dispatch({ type: "SET_REASON", reason })
           setShowValidation(false)
         }}
+        aria-labelledby="return-reason-label"
+        aria-describedby={showReasonError ? reasonErrorId : undefined}
         className="rounded-[var(--radius-card)] border border-border bg-card p-4"
       >
         {RETURN_REASON_PRESETS.map((preset) => (
@@ -51,8 +61,8 @@ export function ReturnReasonStep() {
         ))}
       </RadioGroup>
 
-      {showValidation && !state.reason ? (
-        <p role="alert" className="text-sm text-destructive">
+      {showReasonError ? (
+        <p id={reasonErrorId} role="alert" className="text-sm text-destructive">
           Select a reason to continue.
         </p>
       ) : null}
@@ -70,18 +80,20 @@ export function ReturnReasonStep() {
           }}
           rows={3}
           placeholder={requiresComment ? "Tell us what happened…" : "Optional"}
+          aria-invalid={showCommentError}
+          aria-describedby={showCommentError ? commentErrorId : undefined}
           className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
         />
-        {showValidation && missingComment ? (
-          <p role="alert" className="text-sm text-destructive">
+        {showCommentError ? (
+          <p id={commentErrorId} role="alert" className="text-sm text-destructive">
             Add a comment to tell us what happened.
           </p>
         ) : null}
       </div>
 
-      <div>
+      <ReturnStepActions>
         <Button onClick={handleContinue}>Continue</Button>
-      </div>
+      </ReturnStepActions>
     </div>
   )
 }

@@ -71,7 +71,10 @@
     --destructive: var(--danger);
     --border: var(--line);
     --input: var(--line);
-    --ring: #28b0c8;
+    /* --accent-deep, not raw --accent — raw teal is 2.58:1 on white, which
+       fails the 3:1 WCAG 1.4.11 minimum for focus-indicator borders.
+       --accent-deep is 5.9:1, still clearly teal. */
+    --ring: var(--accent-deep);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);

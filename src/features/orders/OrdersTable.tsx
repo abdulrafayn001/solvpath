@@ -11,7 +11,7 @@ import type { OrdersTableProps } from "./OrdersTable.types"
 
 export function OrdersTable({ orders, isExpanded, onToggleExpanded }: OrdersTableProps) {
   return (
-    <table className="hidden w-full border-collapse text-left md:table">
+    <table className="w-full border-collapse text-left">
       <thead>
         <tr className="border-b border-border text-xs text-muted-foreground">
           <th className="py-2 pr-4 font-medium">Order</th>

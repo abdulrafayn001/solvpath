@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
 import { calculateReturnValueCents, toReturnLineItems } from "@/features/returns/returnCalculations"
+import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
 import { ValidationMessage } from "@/features/returns/ValidationMessage"
 import { formatCents } from "@/lib/format"
 import { cn } from "@/lib/utils"
@@ -33,6 +34,9 @@ export function ReturnResolutionStep() {
     navigate(`/orders/${orderId}/return/review`)
   }
 
+  const resolutionErrorId = "return-resolution-error"
+  const showResolutionError = showValidation && !state.resolution
+
   return (
     <OrderLoadGate orderId={orderId}>
       {(order) => {
@@ -40,7 +44,7 @@ export function ReturnResolutionStep() {
 
         return (
           <div className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground">
+            <p id="return-resolution-label" className="text-sm text-muted-foreground">
               How would you like to be resolved for the returned item(s)?
             </p>
 
@@ -50,6 +54,8 @@ export function ReturnResolutionStep() {
                 dispatch({ type: "SET_RESOLUTION", resolution })
                 setShowValidation(false)
               }}
+              aria-labelledby="return-resolution-label"
+              aria-describedby={showResolutionError ? resolutionErrorId : undefined}
               className="gap-3"
             >
               {RESOLUTION_OPTIONS.map((option) => {
@@ -79,11 +85,13 @@ export function ReturnResolutionStep() {
               })}
             </RadioGroup>
 
-            {showValidation ? <ValidationMessage>Select a resolution to continue.</ValidationMessage> : null}
+            {showResolutionError ? (
+              <ValidationMessage id={resolutionErrorId}>Select a resolution to continue.</ValidationMessage>
+            ) : null}
 
-            <div>
+            <ReturnStepActions>
               <Button onClick={handleContinue}>Continue</Button>
-            </div>
+            </ReturnStepActions>
           </div>
         )
       }}

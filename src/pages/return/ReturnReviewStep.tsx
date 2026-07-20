@@ -10,6 +10,7 @@ import {
   toReturnLineItems,
 } from "@/features/returns/returnCalculations"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
+import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
 import { useSubmitReturn } from "@/hooks/useSubmitReturn"
 import { formatCents } from "@/lib/format"
 
@@ -144,12 +145,12 @@ export function ReturnReviewStep() {
               </div>
             ) : null}
 
-            <div>
+            <ReturnStepActions>
               <Button onClick={handleSubmit} disabled={submitReturn.isPending}>
                 {submitReturn.isPending ? <Loader2 className="animate-spin" /> : null}
                 {submitReturn.isPending ? "Submitting…" : "Submit return"}
               </Button>
-            </div>
+            </ReturnStepActions>
           </div>
         )
       }}

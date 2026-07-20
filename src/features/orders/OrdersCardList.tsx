@@ -10,7 +10,7 @@ import type { OrdersCardListProps } from "./OrdersCardList.types"
 
 export function OrdersCardList({ orders, isExpanded, onToggleExpanded }: OrdersCardListProps) {
   return (
-    <ul className="flex flex-col gap-3 md:hidden">
+    <ul className="flex flex-col gap-3">
       {orders.map((order) => {
         const expanded = isExpanded(order.id)
         return (

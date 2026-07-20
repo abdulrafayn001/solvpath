@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
 import { ReturnItemRow } from "@/features/returns/ReturnItemRow"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
+import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
 import { ValidationMessage } from "@/features/returns/ValidationMessage"
 
 export function ReturnItemsStep() {
@@ -53,9 +54,9 @@ export function ReturnItemsStep() {
               ))}
             </div>
             {showValidation ? <ValidationMessage>Select at least one item to continue.</ValidationMessage> : null}
-            <div>
+            <ReturnStepActions>
               <Button onClick={handleContinue}>Continue</Button>
-            </div>
+            </ReturnStepActions>
           </div>
         )
       }}

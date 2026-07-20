@@ -27,7 +27,7 @@ export function ReturnConfirmationStep() {
         <p className="text-sm text-muted-foreground">
           We don't have a return to confirm here. If you just submitted one, check your email for confirmation.
         </p>
-        <Button render={<Link to={`/orders/${orderId}`} />} className="w-fit">
+        <Button render={<Link to={`/orders/${orderId}`} />} nativeButton={false} className="w-fit">
           Back to order
         </Button>
       </div>
@@ -60,7 +60,7 @@ export function ReturnConfirmationStep() {
         {NEXT_STEPS_COPY[resolution]}
       </p>
 
-      <Button render={<Link to={`/orders/${orderId}`} />} className="w-fit">
+      <Button render={<Link to={`/orders/${orderId}`} />} nativeButton={false} className="w-fit">
         Back to order
       </Button>
     </div>
