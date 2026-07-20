@@ -1,14 +1,15 @@
+import { withNormalizedError } from "./errors";
 import { getOrder, listOrders, submitReturn } from "./mockApi";
 import type { ListParams, Order, Page, ReturnReceipt, ReturnRequest } from "./order.types";
 
 export function fetchOrders(params: ListParams = {}): Promise<Page<Order>> {
-  return listOrders(params);
+  return withNormalizedError(() => listOrders(params));
 }
 
 export function fetchOrder(orderId: string, signal?: AbortSignal): Promise<Order> {
-  return getOrder(orderId, signal);
+  return withNormalizedError(() => getOrder(orderId, signal));
 }
 
 export function createReturn(request: ReturnRequest): Promise<ReturnReceipt> {
-  return submitReturn(request);
+  return withNormalizedError(() => submitReturn(request));
 }
