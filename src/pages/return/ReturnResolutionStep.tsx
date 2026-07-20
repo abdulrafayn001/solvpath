@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useId, useState } from "react"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 import type { ReturnResolution } from "@/api"
@@ -20,6 +20,8 @@ export function ReturnResolutionStep() {
   const navigate = useNavigate()
   const { state, dispatch } = useReturnFlow()
   const [showValidation, setShowValidation] = useState(false)
+  const resolutionLabelId = useId()
+  const resolutionErrorId = useId()
 
   const redirectStep = getReturnFlowRedirectStep("resolution", state)
   if (redirectStep) {
@@ -34,7 +36,6 @@ export function ReturnResolutionStep() {
     navigate(`/orders/${orderId}/return/review`)
   }
 
-  const resolutionErrorId = "return-resolution-error"
   const showResolutionError = showValidation && !state.resolution
 
   return (
@@ -44,7 +45,7 @@ export function ReturnResolutionStep() {
 
         return (
           <div className="flex flex-col gap-4">
-            <p id="return-resolution-label" className="text-sm text-muted-foreground">
+            <p id={resolutionLabelId} className="text-sm text-muted-foreground">
               How would you like to be resolved for the returned item(s)?
             </p>
 
@@ -54,7 +55,7 @@ export function ReturnResolutionStep() {
                 dispatch({ type: "SET_RESOLUTION", resolution })
                 setShowValidation(false)
               }}
-              aria-labelledby="return-resolution-label"
+              aria-labelledby={resolutionLabelId}
               aria-describedby={showResolutionError ? resolutionErrorId : undefined}
               className="gap-3"
             >

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useId, useState } from "react"
 import { Navigate, useNavigate, useParams } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -14,6 +14,10 @@ export function ReturnReasonStep() {
   const navigate = useNavigate()
   const { state, dispatch } = useReturnFlow()
   const [showValidation, setShowValidation] = useState(false)
+  const reasonLabelId = useId()
+  const reasonErrorId = useId()
+  const commentFieldId = useId()
+  const commentErrorId = useId()
 
   const redirectStep = getReturnFlowRedirectStep("reason", state)
   if (redirectStep) {
@@ -32,14 +36,12 @@ export function ReturnReasonStep() {
     navigate(`/orders/${orderId}/return/resolution`)
   }
 
-  const reasonErrorId = "return-reason-error"
-  const commentErrorId = "return-comment-error"
   const showReasonError = showValidation && !state.reason
   const showCommentError = showValidation && missingComment
 
   return (
     <div className="flex flex-col gap-4">
-      <p id="return-reason-label" className="text-sm text-muted-foreground">
+      <p id={reasonLabelId} className="text-sm text-muted-foreground">
         What's the reason for this return?
       </p>
 
@@ -49,7 +51,7 @@ export function ReturnReasonStep() {
           dispatch({ type: "SET_REASON", reason })
           setShowValidation(false)
         }}
-        aria-labelledby="return-reason-label"
+        aria-labelledby={reasonLabelId}
         aria-describedby={showReasonError ? reasonErrorId : undefined}
         className="rounded-[var(--radius-card)] border border-border bg-card p-4"
       >
@@ -68,11 +70,11 @@ export function ReturnReasonStep() {
       ) : null}
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="return-comment" className="text-sm text-foreground">
+        <label htmlFor={commentFieldId} className="text-sm text-foreground">
           Additional details{requiresComment ? "" : " (optional)"}
         </label>
         <textarea
-          id="return-comment"
+          id={commentFieldId}
           value={state.comment}
           onChange={(event) => {
             dispatch({ type: "SET_COMMENT", comment: event.target.value })
