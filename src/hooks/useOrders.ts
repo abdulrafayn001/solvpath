@@ -2,6 +2,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { fetchOrders } from "@/api";
 import type { OrderStatus } from "@/api";
+import { ORDERS_PAGE_SIZE } from "@/lib/constants";
 import { useDebouncedValue } from "./useDebouncedValue";
 
 export interface UseOrdersParams {
@@ -11,7 +12,7 @@ export interface UseOrdersParams {
   query?: string;
 }
 
-export function useOrders({ page = 1, pageSize = 4, status = "all", query = "" }: UseOrdersParams = {}) {
+export function useOrders({ page = 1, pageSize = ORDERS_PAGE_SIZE, status = "all", query = "" }: UseOrdersParams = {}) {
   const debouncedQuery = useDebouncedValue(query, 300);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
