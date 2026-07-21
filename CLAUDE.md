@@ -17,7 +17,6 @@ A frontend take-home: an order-management dashboard with a multi-step returns fl
 - `npm run typecheck` — `tsc --noEmit`
 - `npm run lint` — ESLint (flat config: TS + react-hooks + react-refresh)
 - `npm run format` — Prettier over `**/*.{ts,tsx}`
-- `npm run test` — `vitest run`
 
 ## Code style
 
@@ -69,7 +68,7 @@ src/
 - State: `ReturnFlowContext` provides `{ state, dispatch, order }` (see `ReturnFlowContext.tsx`); `returnFlowReducer.ts` is a plain reducer (`SET_ITEMS`, `SET_REASON`, `SET_COMMENT`, `SET_RESOLUTION`, `RESET`) — no external state library.
 - **Step gating**: `returnFlowGuard.ts`'s `getReturnFlowRedirectStep` finds the earliest incomplete step before the one being viewed and redirects there — you can't jump ahead to `review` without a resolution selected, etc.
 - **Order eligibility guard**: `ReturnFlowPage` uses an extracted `isOrderReturnEligible` check to bounce non-delivered/ineligible orders back to the order detail page instead of into the flow.
-- `returnCalculations.ts` computes return value in cents (base value, store-credit bonus at +10% with round-half-up, per-resolution totals) — deliberately integer-cents arithmetic throughout to avoid float drift (see `returnCalculations.test.ts` for the drift cases this guards against, e.g. `$19.99 x 3`).
+- `returnCalculations.ts` computes return value in cents (base value, store-credit bonus at +10% with round-half-up, per-resolution totals) — deliberately integer-cents arithmetic throughout to avoid float drift on repeating-decimal prices like `$19.99 x 3`.
 - **Scope cut, deliberately**: one resolution applies to the whole return, not per-item (the mock API only accepts a single resolution per submission — see README's Decision Log).
 
 ### Styling
