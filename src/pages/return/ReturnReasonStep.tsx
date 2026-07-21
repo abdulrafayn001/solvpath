@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
 import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
 import { RETURN_REASON_PRESETS } from "@/features/returns/returnReasonPresets"
+import { cn } from "@/lib/utils"
 
 import { getReturnFlowRedirectStep } from "./returnFlowGuard"
 
@@ -53,14 +54,23 @@ export function ReturnReasonStep() {
         }}
         aria-labelledby={reasonLabelId}
         aria-describedby={showReasonError ? reasonErrorId : undefined}
-        className="rounded-[var(--radius-card)] border border-border bg-card p-4"
+        className="gap-3"
       >
-        {RETURN_REASON_PRESETS.map((preset) => (
-          <label key={preset.value} className="flex items-center gap-2.5 text-sm text-foreground">
-            <RadioGroupItem value={preset.value} />
-            {preset.value}
-          </label>
-        ))}
+        {RETURN_REASON_PRESETS.map((preset) => {
+          const isSelected = state.reason === preset.value
+          return (
+            <label
+              key={preset.value}
+              className={cn(
+                "flex cursor-pointer items-center gap-3 rounded-[var(--radius-card)] border border-border bg-card p-4 transition-colors",
+                isSelected && "border-ring ring-2 ring-ring/50",
+              )}
+            >
+              <RadioGroupItem value={preset.value} />
+              <span className="text-sm font-medium text-foreground">{preset.value}</span>
+            </label>
+          )
+        })}
       </RadioGroup>
 
       {showReasonError ? (

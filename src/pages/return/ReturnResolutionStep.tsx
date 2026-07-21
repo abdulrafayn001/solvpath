@@ -4,7 +4,6 @@ import { Navigate, useNavigate, useParams } from "react-router-dom"
 import type { ReturnResolution } from "@/api"
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { OrderLoadGate } from "@/features/returns/OrderLoadGate"
 import { useReturnFlow } from "@/features/returns/ReturnFlowContext"
 import { calculateReturnValueCents, toReturnLineItems } from "@/features/returns/returnCalculations"
 import { ReturnStepActions } from "@/features/returns/ReturnStepActions"
@@ -18,7 +17,7 @@ import { getReturnFlowRedirectStep } from "./returnFlowGuard"
 export function ReturnResolutionStep() {
   const { orderId } = useParams()
   const navigate = useNavigate()
-  const { state, dispatch } = useReturnFlow()
+  const { state, dispatch, order } = useReturnFlow()
   const [showValidation, setShowValidation] = useState(false)
   const resolutionLabelId = useId()
   const resolutionErrorId = useId()
@@ -37,65 +36,58 @@ export function ReturnResolutionStep() {
   }
 
   const showResolutionError = showValidation && !state.resolution
+  const returnLineItems = toReturnLineItems(state.selectedItems, order.items)
 
   return (
-    <OrderLoadGate orderId={orderId}>
-      {(order) => {
-        const returnLineItems = toReturnLineItems(state.selectedItems, order.items)
+    <div className="flex flex-col gap-4">
+      <p id={resolutionLabelId} className="text-sm text-muted-foreground">
+        How would you like to be resolved for the returned item(s)?
+      </p>
 
-        return (
-          <div className="flex flex-col gap-4">
-            <p id={resolutionLabelId} className="text-sm text-muted-foreground">
-              How would you like to be resolved for the returned item(s)?
-            </p>
+      <RadioGroup
+        value={state.resolution ?? ""}
+        onValueChange={(resolution: ReturnResolution) => {
+          dispatch({ type: "SET_RESOLUTION", resolution })
+          setShowValidation(false)
+        }}
+        aria-labelledby={resolutionLabelId}
+        aria-describedby={showResolutionError ? resolutionErrorId : undefined}
+        className="gap-3"
+      >
+        {RESOLUTION_OPTIONS.map((option) => {
+          const isSelected = state.resolution === option.value
+          const amountCents = calculateReturnValueCents(returnLineItems, option.value)
 
-            <RadioGroup
-              value={state.resolution ?? ""}
-              onValueChange={(resolution: ReturnResolution) => {
-                dispatch({ type: "SET_RESOLUTION", resolution })
-                setShowValidation(false)
-              }}
-              aria-labelledby={resolutionLabelId}
-              aria-describedby={showResolutionError ? resolutionErrorId : undefined}
-              className="gap-3"
+          return (
+            <label
+              key={option.value}
+              className={cn(
+                "flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border border-border bg-card p-4 transition-colors",
+                isSelected && "border-ring ring-2 ring-ring/50",
+              )}
             >
-              {RESOLUTION_OPTIONS.map((option) => {
-                const isSelected = state.resolution === option.value
-                const amountCents = calculateReturnValueCents(returnLineItems, option.value)
+              <RadioGroupItem value={option.value} className="mt-0.5" />
+              <div className="flex flex-1 flex-col gap-0.5">
+                <span className="text-sm font-medium text-foreground">{option.title}</span>
+                <span className="text-xs text-muted-foreground">{option.description}</span>
+              </div>
+              {option.showsAmount ? (
+                <span className="text-sm font-medium tabular-nums text-foreground">
+                  {formatCents(amountCents)}
+                </span>
+              ) : null}
+            </label>
+          )
+        })}
+      </RadioGroup>
 
-                return (
-                  <label
-                    key={option.value}
-                    className={cn(
-                      "flex cursor-pointer items-start gap-3 rounded-[var(--radius-card)] border border-border bg-card p-4 transition-colors",
-                      isSelected && "border-ring ring-2 ring-ring/50",
-                    )}
-                  >
-                    <RadioGroupItem value={option.value} className="mt-0.5" />
-                    <div className="flex flex-1 flex-col gap-0.5">
-                      <span className="text-sm font-medium text-foreground">{option.title}</span>
-                      <span className="text-xs text-muted-foreground">{option.description}</span>
-                    </div>
-                    {option.showsAmount ? (
-                      <span className="text-sm font-medium tabular-nums text-foreground">
-                        {formatCents(amountCents)}
-                      </span>
-                    ) : null}
-                  </label>
-                )
-              })}
-            </RadioGroup>
+      {showResolutionError ? (
+        <ValidationMessage id={resolutionErrorId}>Select a resolution to continue.</ValidationMessage>
+      ) : null}
 
-            {showResolutionError ? (
-              <ValidationMessage id={resolutionErrorId}>Select a resolution to continue.</ValidationMessage>
-            ) : null}
-
-            <ReturnStepActions>
-              <Button onClick={handleContinue}>Continue</Button>
-            </ReturnStepActions>
-          </div>
-        )
-      }}
-    </OrderLoadGate>
+      <ReturnStepActions>
+        <Button onClick={handleContinue}>Continue</Button>
+      </ReturnStepActions>
+    </div>
   )
 }
