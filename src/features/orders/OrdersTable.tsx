@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 
 import { StatusBadge } from "@/components/StatusBadge"
 import { formatCents, formatOrderDate } from "@/lib/format"
-import { ExpandToggle } from "./ExpandToggle"
 import { ItemIdentity } from "./ItemIdentity"
 import { ItemSummary } from "./ItemSummary"
 import { getItemLineTotalCents, getOrderTotalCents } from "./orderSummary"
@@ -13,12 +12,12 @@ export function OrdersTable({ orders, isExpanded, onToggleExpanded }: OrdersTabl
   return (
     <table className="w-full border-collapse text-left">
       <thead>
-        <tr className="border-b border-border text-xs text-muted-foreground">
-          <th className="py-2 pr-4 font-medium">Order</th>
-          <th className="py-2 pr-4 font-medium">Date</th>
-          <th className="py-2 pr-4 font-medium">Items</th>
-          <th className="py-2 pr-4 font-medium">Total</th>
-          <th className="py-2 pr-4 font-medium">Status</th>
+        <tr className="border-b border-border bg-muted/40 text-[11px] font-semibold tracking-wide text-muted-foreground uppercase">
+          <th className="px-5 py-3 sm:px-6">Order</th>
+          <th className="px-5 py-3 sm:px-6">Date</th>
+          <th className="px-5 py-3 sm:px-6">Items</th>
+          <th className="px-5 py-3 text-right sm:px-6">Total</th>
+          <th className="px-5 py-3 text-right sm:px-6">Status</th>
         </tr>
       </thead>
       <tbody>
@@ -26,32 +25,29 @@ export function OrdersTable({ orders, isExpanded, onToggleExpanded }: OrdersTabl
           const expanded = isExpanded(order.id)
           return (
             <Fragment key={order.id}>
-              <tr className="border-b border-border last:border-0">
-                <td className="py-3 pr-4 align-top">
+              <tr className="border-b border-border transition-colors last:border-0 hover:bg-muted/30">
+                <td className="px-5 py-4 align-middle sm:px-6">
                   <Link
                     to={`/orders/${order.id}`}
-                    className="text-sm font-medium text-foreground hover:underline"
+                    className="text-sm font-semibold text-foreground transition-colors hover:text-accent-foreground"
                   >
                     {order.orderNumber}
                   </Link>
                 </td>
-                <td className="py-3 pr-4 align-top text-sm text-muted-foreground">
+                <td className="px-5 py-4 align-middle text-sm whitespace-nowrap text-muted-foreground sm:px-6">
                   {formatOrderDate(order.placedAt)}
                 </td>
-                <td className="py-3 pr-4 align-top">
-                  <div className="flex flex-col items-start gap-1">
-                    <ItemSummary order={order} />
-                    <ExpandToggle
-                      expanded={expanded}
-                      itemCount={order.items.length}
-                      onToggle={() => onToggleExpanded(order.id)}
-                    />
-                  </div>
+                <td className="px-5 py-4 align-middle sm:px-6">
+                  <ItemSummary
+                    order={order}
+                    expanded={expanded}
+                    onToggle={() => onToggleExpanded(order.id)}
+                  />
                 </td>
-                <td className="py-3 pr-4 align-top text-sm text-foreground">
+                <td className="px-5 py-4 align-middle text-right text-sm font-medium whitespace-nowrap text-foreground sm:px-6">
                   {formatCents(getOrderTotalCents(order))}
                 </td>
-                <td className="py-3 pr-4 align-top">
+                <td className="px-5 py-4 text-right align-middle sm:px-6">
                   <StatusBadge status={order.status} />
                 </td>
               </tr>
@@ -60,12 +56,12 @@ export function OrdersTable({ orders, isExpanded, onToggleExpanded }: OrdersTabl
                     <tr key={item.id} className="border-b border-border bg-muted/30 last:border-b">
                       <td />
                       <td />
-                      <td className="py-2 pr-4 pl-0">
+                      <td className="px-5 py-3 pl-5 sm:px-6 sm:pl-6">
                         <div className="flex items-center gap-3">
                           <ItemIdentity item={item} />
                         </div>
                       </td>
-                      <td className="py-2 pr-4 text-sm tabular-nums text-foreground">
+                      <td className="px-5 py-3 text-right text-sm tabular-nums whitespace-nowrap text-foreground sm:px-6">
                         {formatCents(getItemLineTotalCents(item))}
                       </td>
                       <td />

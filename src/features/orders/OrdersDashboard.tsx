@@ -11,15 +11,20 @@ export function OrdersDashboard() {
   const isDesktop = useMediaQuery(DESKTOP_QUERY)
 
   return (
-    <div className="flex flex-col gap-6">
-      <h1 className="text-lg font-medium">Orders</h1>
-
-      <div className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-border bg-card p-4 sm:flex-row sm:items-center">
-        <SearchInput value={query} onChange={setQuery} />
-        <StatusFilter value={status} onChange={setStatus} />
+    <div className="flex flex-col gap-8">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Orders</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Search your orders, check delivery status, or start a return.
+        </p>
       </div>
 
-      <div className="rounded-[var(--radius-card)] border border-border bg-card p-4">
+      <div className="rounded-[var(--radius-card)] border border-border bg-card overflow-hidden">
+        <div className="flex flex-col gap-3 border-b border-border p-4 sm:flex-row sm:items-center sm:p-5">
+          <SearchInput value={query} onChange={setQuery} />
+          <StatusFilter value={status} onChange={setStatus} />
+        </div>
+
         {isDesktop ? (
           <DesktopOrdersView
             status={status}

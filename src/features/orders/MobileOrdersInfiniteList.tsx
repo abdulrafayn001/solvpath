@@ -25,11 +25,21 @@ export function MobileOrdersInfiniteList({
   })
 
   if (isLoading) {
-    return <OrdersCardListSkeleton />
+    return (
+      <div className="p-4 sm:p-5">
+        <OrdersCardListSkeleton />
+      </div>
+    )
   }
 
   if (isError) {
-    return <ErrorState description={error?.message} onRetry={() => refetch()} />
+    return (
+      <ErrorState
+        description={error?.message}
+        onRetry={() => refetch()}
+        className="rounded-none border-0 bg-transparent"
+      />
+    )
   }
 
   const orders = data?.pages.flatMap((page) => page.data) ?? []
@@ -39,7 +49,7 @@ export function MobileOrdersInfiniteList({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 p-4 sm:p-5">
       <OrdersCardList orders={orders} isExpanded={isExpanded} onToggleExpanded={toggleExpanded} />
       <div ref={sentinelRef} className="flex justify-center py-2">
         {isFetchingNextPage ? (

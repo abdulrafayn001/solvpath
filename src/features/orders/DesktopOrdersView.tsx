@@ -29,7 +29,13 @@ export function DesktopOrdersView({
   }
 
   if (isError) {
-    return <ErrorState description={error?.message} onRetry={() => refetch()} />
+    return (
+      <ErrorState
+        description={error?.message}
+        onRetry={() => refetch()}
+        className="rounded-none border-0 bg-transparent"
+      />
+    )
   }
 
   if (!data || data.data.length === 0) {
@@ -37,9 +43,11 @@ export function DesktopOrdersView({
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col">
       <OrdersTable orders={data.data} isExpanded={isExpanded} onToggleExpanded={toggleExpanded} />
-      <OrdersPagination page={page} pageSize={data.pageSize} total={data.total} onPageChange={onPageChange} />
+      <div className="border-t border-border px-5 py-4 sm:px-6">
+        <OrdersPagination page={page} pageSize={data.pageSize} total={data.total} onPageChange={onPageChange} />
+      </div>
     </div>
   )
 }
