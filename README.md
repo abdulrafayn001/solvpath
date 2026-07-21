@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button"
 ## Decision Log
 
 ### What I built
+- Added `CLAUDE.md` documenting the codebase for LLM coding tools (Claude Code and similar), keep it in sync as the project evolves, since it's now the primary onboarding doc for both AI assistants and future devs working alongside them.
 - Locked the project's Node version via `.nvmrc` (24.18.0), `package.json` `engines.node`, and `.npmrc` (`engine-strict=true`) — so every contributor and CI run resolves to the same Node runtime instead of whatever is installed globally. This avoids "works on my machine" bugs from Node version drift (e.g. differing built-in fetch/test-runner behavior, engine warnings, or native module ABI mismatches across major versions).
 - Configured ESLint (flat config, TS + React Hooks + React Refresh rules) and Prettier (with `prettier-plugin-tailwindcss` for class sorting), and set up the `@/` path alias in both `tsconfig.json` and `vite.config.ts` so imports resolve as `@/features/...` instead of relative `../../../` chains.
 - Mapped `brand-tokens.css` (navy/teal) onto shadcn's CSS variables in `src/index.css`; `--muted`/`--accent` collide in name but differ in meaning between the two files, so the shadcn slots got literal hex values hardcoded rather than chained via `var()`, leaving brand-tokens.css's own `--muted`/`--accent` untouched for direct consumers like `StatusBadge`.
