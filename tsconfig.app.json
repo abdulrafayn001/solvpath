@@ -19,7 +19,12 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    // Off for src/**: mockApi.ts's ApiError uses a constructor parameter
+    // property, which erasableSyntaxOnly forbids, and it's a fixed
+    // contract we can't edit. src/** is bundled by Vite, not run via
+    // Node's native type-stripping, so the erasable-only guarantee isn't
+    // needed here (tsconfig.node.json still enforces it for vite.config.ts,
+    // which is what that guarantee actually protects).
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["./src/*"]
