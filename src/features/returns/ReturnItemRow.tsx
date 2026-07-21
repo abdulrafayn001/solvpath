@@ -9,7 +9,7 @@ export function ReturnItemRow({ item, qty, onChange }: ReturnItemRowProps) {
   const disabled = !item.returnEligible
 
   return (
-    <div className={cn("flex items-center gap-3 py-1", disabled && "opacity-60")}>
+    <div className={cn("flex items-center gap-3 py-3", disabled && "opacity-60")}>
       <OrderThumbnail color={item.thumbColor} />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-sm text-foreground">{item.name}</span>
