@@ -8,7 +8,7 @@ A frontend take-home: an order-management dashboard with a multi-step returns fl
 - Tailwind CSS v4 (via `@tailwindcss/vite`, no `tailwind.config`) + shadcn/ui (`base-vega` style, `neutral` base color, see `components.json`)
 - TanStack Query v5 for all server-state (fetching, mutations, caching)
 - Vitest for unit tests
-- Node pinned to `24.18.0` via `.nvmrc` / `engines.node` / `.npmrc` (`engine-strict=true`)
+- Node pinned to `24.18.0` locally via `.nvmrc`; `package.json`'s `engines.node` is the looser `24.x` (Vercel only resolves a major Node version, so an exact patch pin there fails the build) with `engine-strict=true` in `.npmrc` still enforcing the major version on install
 
 ## Commands
 
